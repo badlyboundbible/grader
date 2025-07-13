@@ -138,10 +138,10 @@
           };
 
           const getQuestionAccentColor = (index) => {
-            if (index >= 0 && index <= 2) return 'pink-500';
-            if (index >= 3 && index <= 5) return 'cyan-500';
-            if (index >= 6 && index <= 9) return 'yellow-500';
-            return 'gray-500';
+            if (index >= 0 && index <= 2) return 'bg-pink-500';
+            if (index >= 3 && index <= 5) return 'bg-cyan-500';
+            if (index >= 6 && index <= 9) return 'bg-yellow-500';
+            return 'bg-gray-500';
           };
 
           const getProgressPercentage = () => {
@@ -186,7 +186,7 @@
                       className: `p-6 border-2 rounded-2xl shadow-sm transition-all duration-200 hover:shadow-md ${getQuestionBgColor(index)}`
                     },
                       React.createElement('div', { className: "flex items-center justify-between mb-6" },
-                        React.createElement('div', { className: `w-12 h-12 rounded-2xl bg-${getQuestionAccentColor(index)} flex items-center justify-center text-white font-bold text-xl shadow-lg` },
+                        React.createElement('div', { className: `w-12 h-12 rounded-2xl ${getQuestionAccentColor(index)} flex items-center justify-center text-white font-bold text-xl shadow-lg` },
                           getQuestionLabel(index)
                         ),
                         answer && React.createElement('div', { className: "w-8 h-8 bg-green-500 rounded-full flex items-center justify-center" },
@@ -361,7 +361,7 @@
                   ),
                   
                   // Calculate Button
-                  React.createElement('div', { className: "sticky bottom-4 mt-8" },
+                  React.createElement('div', { className: "mt-8" },
                     React.createElement('button', {
                       onClick: handleSubmit,
                       disabled: !allQuestionsAnswered,
@@ -426,7 +426,12 @@
                         console.log('SW registered: ', registration);
                     })
                     .catch((registrationError) => {
-                        console.log('SW registration failed: ', registrationError);
+                        // Silently fail in development/preview environments
+                        if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('github.io')) {
+                            console.log('SW registration skipped (not in production environment)');
+                        } else {
+                            console.log('SW registration failed: ', registrationError);
+                        }
                     });
             });
         }
